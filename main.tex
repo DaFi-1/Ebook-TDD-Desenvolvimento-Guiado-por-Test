@@ -1,0 +1,1430 @@
+\documentclass[a4paper,12pt]{article}
+
+% ================= CONFIGURAÇÃO DE PÁGINA =================
+\usepackage[
+ paperwidth=25.0cm,
+ paperheight=400.0cm,
+ left=1cm,
+ right=1cm,
+ top=0cm,
+ bottom=0cm
+]{geometry}
+
+\usepackage{graphicx}
+
+\emergencystretch=3em
+\hbadness=10000
+\tolerance=9999
+
+% ================= PACOTES =================
+%\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fontspec}
+
+% ================= ESTILO DE CÓDIGO =================
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{black!5},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{green!60!black},
+    commentstyle=\color{gray},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=true
+}
+
+% ================= CAPÍTULO COM FUNDO =================
+\newcommand{\capitulo}[1]{
+    \vspace{1em}
+    \noindent
+    \colorbox{black!15}{
+        \parbox{\dimexpr\linewidth-2\fboxsep}{
+            \centering \Large \textbf{#1}
+        }
+    }
+    \vspace{1em}
+}
+
+% ================= TÍTULO =================
+\title{\centering Estudo do livro - TDD Desenvolvimento Guiado por Test}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle{}
+
+{\centering \includegraphics[width=10cm]{./res/ebook.png} \par}
+
+% ================= INTRODUÇÃO =================
+\section*{Sobre o Estudo}
+Este repositório é dedicado ao estudo aprofundado do livro apresentado na imagem. A obra traz reflexões e exemplos extremamente plausíveis sobre a metodologia de \textbf{TDD (Test-Driven Development)}.
+Inicialmente, havia a percepção de que TDD se resumia ao uso de bibliotecas como \textbf{JUnit}, \textbf{unittest} ou \textbf{pytest}. No entanto, o estudo demonstrou que essas ferramentas são apenas \textit{frameworks de teste}, que surgiram naturalmente a partir de padrões observados por desenvolvedores ao longo do tempo.
+Com base no conteúdo do livro, fica claro que TDD é, na verdade, uma \textbf{metodologia estruturada}, com um fluxo bem definido — quase como um ritual. Esse processo pode ser comparado a um rio que, ao encontrar obstáculos, desvia momentaneamente seu curso, mas no final todas as suas partes convergem para um único caminho.
+
+O livro também aborda conceitos relevantes como \textbf{padrões de projeto} e faz menções a \textbf{BDD}. Apesar de alguns capítulos apresentarem explicações mais extensas do que o necessário, o conteúdo geral é extremamente valioso.
+De forma geral, trata-se de uma leitura recomendada tanto para iniciantes quanto para desenvolvedores com alguma experiência. O nível não é excessivamente avançado, mas entrega exatamente o que se propõe.
+
+% ================= CÓDIGO =================
+\capitulo{Capítulo 1}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Dollar:
+    def __init__(self, amount: int):
+        self.amount = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+class TestDolar(unittest.TestCase):
+
+    def testMultiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 2}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Dollar:
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class TestDolar(unittest.TestCase):
+
+    def testMultiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 3}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Dollar:
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.get_amount()
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 4}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Dollar:
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.get_amount()
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 5}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Dollar(object):
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.get_amount()
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class Franc(object):
+
+    __amount: int
+
+    def __init__(self, amount: int) -> None:
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> Franc:
+        return Franc(self.amount * multiplier)
+
+    def equals(self, obj1: object) -> Franc:
+        franc: Franc = obj1 
+        return self.amount == franc.amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self):
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        self.assertEqual(15, five.times(3))
+
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 6}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Money:
+    __amount: int
+
+class Dollar(Money):
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.get_amount()
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class Franc(Money):
+    def __init__(self, amount: int) -> None:
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> Franc:
+        return self.amount * multiplier
+
+    def equals(self, obj1: object) -> Franc:
+        franc: Franc = obj1 
+        return self.amount == franc.amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self):
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        self.assertEqual(15, five.times(3))
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+        self.assertTrue(Franc(5).equals(Franc(5)))
+        self.assertFalse(Franc(5).equals(Franc(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 7}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Money:
+    __amount: int
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.amount
+
+
+class Dollar(Money):
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> None:
+        self.amount *= multiplier
+
+    def get_amount(self) -> float:
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+class Franc(Money):
+    def __init__(self, amount: int) -> None:
+        self.amount: int = amount
+
+    def times(self, multiplier: int) -> Franc:
+        return self.amount * multiplier
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self):
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        self.assertEqual(15, five.times(3))
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+        self.assertTrue(Franc(5).equals(Franc(5)))
+        self.assertFalse(Franc(5).equals(Franc(6)))
+        self.assertFalse(Franc(5).equals(Dollar(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 8}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+
+class Money:
+    __amount: int
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.amount
+
+    def times(self, multiplier: int) -> object:
+        self.amount *= multiplier
+        return self.amount
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+
+class Dollar(Money):
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def get_amount(self) -> float:
+        return self.amount
+
+class Franc(Money):
+    def __init__(self, amount: int) -> None:
+        self.amount: int = amount
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self):
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self):
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        five.set_amount(5)
+        self.assertEqual(15, five.times(3))
+
+    def test_equality(self):
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+        self.assertTrue(Franc(5).equals(Franc(5)))
+        self.assertFalse(Franc(5).equals(Franc(6)))
+        self.assertFalse(Franc(5).equals(Dollar(6)))
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 9}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+class Money(ABC):
+    __amount: int
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.amount
+
+    def times(self, multiplier: int) -> object:
+        self.amount *= multiplier
+        return self.amount
+
+    @abstractmethod
+    def currency(self) -> str:...
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+    def get_amount(self) -> float:
+        return self.amount
+
+
+class Dollar(Money):
+    def __init__(self, amount: int):
+        self.amount: int = amount
+
+    def currency(self) -> str:
+        return 'USD'
+
+class Franc(Money):
+    def __init__(self, amount: int) -> None:
+        self.amount: int = amount
+
+    def currency(self) -> str:
+        return 'CHF'
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self) -> None:
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        five.set_amount(5)
+        self.assertEqual(15, five.times(3))
+
+    def test_equality(self) -> None:
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+        self.assertTrue(Franc(5).equals(Franc(5)))
+        self.assertFalse(Franc(5).equals(Franc(6)))
+        self.assertFalse(Franc(5).equals(Dollar(6)))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Dollar(1).currency())
+        self.assertEqual("CHF", Franc(1).currency())
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 10}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+class Money(ABC):
+    __amount: int
+
+    def equals(self, obj1: Dollar):
+        dollar = obj1
+        return self.amount == dollar.amount
+
+    def times(self, multiplier: int) -> object:
+        self.amount *= multiplier
+        return self.amount
+
+    @abstractmethod
+    def currency(self) -> str:...
+
+    def set_amount(self, new_amount: int) -> None:
+        self.amount = new_amount
+
+    def get_amount(self) -> float:
+        return self.amount
+
+
+class Dollar(Money):
+    def __init__(self, amount: int, currencyy: str = "USD"):
+        self.amount:    int = amount
+        self.currencyy: str = currencyy 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+class Franc(Money):
+    def __init__(self, amount: int, currencyy: str = "CHF"):
+        self.amount:    int = amount
+        self.currencyy: str = currencyy 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        five = Dollar(5)
+        five.times(2) 
+        self.assertEqual(10, five.amount)
+        five.set_amount(5)
+        five.times(3) 
+        self.assertEqual(15, five.amount)
+
+    def test_franc_multiplication(self) -> None:
+        five = Franc(5)
+        self.assertEqual(10, five.times(2))
+        five.set_amount(5)
+        self.assertEqual(15, five.times(3))
+
+    def test_equality(self) -> None:
+        self.assertTrue(Dollar(5).equals(Dollar(5)))
+        self.assertFalse(Dollar(5).equals(Dollar(6)))
+        self.assertTrue(Franc(5).equals(Franc(5)))
+        self.assertFalse(Franc(5).equals(Franc(6)))
+        self.assertFalse(Franc(5).equals(Dollar(6)))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Dollar(1).currency())
+        self.assertEqual("CHF", Franc(1).currency())
+
+    def test_different_class_equality() -> None:
+        self.assertTrue(Money)
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 11}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount: int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount = new_amount
+
+    def get_amount(self) -> float:
+        return self._amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+
+\capitulo{Capítulo 12}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount: int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def plus(self, number: int) -> int:
+        return self._amount + number 
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount = new_amount
+
+    def get_amount(self) -> int:
+        return self._amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+    def test_simple_addition(self) -> None:
+        summ = Money(5,"USD").plus(Money(5,"USD").get_amount())
+        self.assertEqual(Money(10,"USD").get_amount(), summ)
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+
+\capitulo{Capítulo 13}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount: int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def add(self, number: int) -> None :
+        self._amount += number 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def plus(self, number: int) -> int:
+        return self._amount + number 
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount: int = new_amount
+
+    def get_amount(self) -> int:
+        return self._amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+    def test_simple_addition(self) -> None:
+        summ = Money(5,"USD").plus(Money(5,"USD").get_amount())
+        self.assertEqual(Money(10,"USD").get_amount(), summ)
+
+    def test_simple_add_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.add(i)
+            x += i
+            self.assertEqual(x, m1.get_amount())
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+
+\capitulo{Capítulo 14}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount: int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def add(self, number: int) -> None :
+        self._amount += number 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def plus(self, number: int) -> int:
+        return self._amount + number 
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount: int = new_amount
+
+    def get_amount(self) -> int:
+        return self._amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+    def test_simple_addition(self) -> None:
+        summ = Money(5,"USD").plus(Money(5,"USD").get_amount())
+        self.assertEqual(Money(10,"USD").get_amount(), summ)
+
+    def test_simple_add_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.add(i)
+            x += i
+            self.assertEqual(x, m1.get_amount())
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+
+\capitulo{Capítulo 15}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount: int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def add(self, number: int) -> None :
+        self._amount += number 
+
+    def sub(self, number: int) -> None :
+        self._amount -= number 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def plus(self, number: int) -> int:
+        return self._amount + number 
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount: int = new_amount
+
+    def get_amount(self) -> int:
+        return self._amount
+
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+    def test_simple_addition(self) -> None:
+        summ = Money(5,"USD").plus(Money(5,"USD").get_amount())
+        self.assertEqual(Money(10,"USD").get_amount(), summ)
+
+    def test_simple_add_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.add(i)
+            x += i
+            self.assertEqual(x, m1.get_amount())
+
+    def test_simple_sub_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.sub(i)
+            x -= i
+            self.assertEqual(x, m1.get_amount())
+
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 16}
+\begin{lstlisting}[style=pythonstyle]
+import unittest
+from abc import ABC, abstractmethod
+
+class Money(ABC):
+    _amount: int
+
+    def __init__(self, amount: int, currencyy: str):
+        self._amount:    int = amount
+        self.currencyy: str = currencyy 
+
+    def equals(self, valor: int):
+        return self._amount == valor 
+
+    def times(self, multiplier: int) -> object:
+        self._amount *= multiplier
+        return self._amount
+
+    def add(self, number: int) -> None :
+        self._amount += number 
+
+    def sub(self, number: int) -> None :
+        self._amount -= number 
+
+    def currency(self) -> str:
+        return self.currencyy
+
+    def plus(self, number: int) -> int:
+        return self._amount + number 
+
+    def set_amount(self, new_amount: int) -> None:
+        self._amount: int = new_amount
+
+    def get_amount(self) -> int:
+        return self._amount
+
+class TestDolar(unittest.TestCase):
+
+    def test_multiplication(self) -> None:
+        m1 = Money(5, "USD")
+        m1.times(2) 
+        self.assertEqual(10, m1._amount)
+        m1.set_amount(5)
+        m1.times(3) 
+        self.assertEqual(15, m1._amount)
+
+    def test_equality(self) -> None:
+        self.assertTrue(Money(5, "USD").equals(5))
+
+    def test_currency(self) -> None:
+        self.assertEqual("USD", Money(1, "USD").currency())
+        self.assertEqual("CHF", Money(1, "CHF").currency())
+
+    def test_simple_addition(self) -> None:
+        summ = Money(5,"USD").plus(Money(5,"USD").get_amount())
+        self.assertEqual(Money(10,"USD").get_amount(), summ)
+
+    def test_simple_add_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.add(i)
+            x += i
+            self.assertEqual(x, m1.get_amount())
+
+    def test_simple_sub_value(self) -> None:
+        m1 = Money(10,"USD")
+        x = 10
+        for i in range(0,10):
+            m1.sub(i)
+            x -= i
+            self.assertEqual(x, m1.get_amount())
+
+if __name__ == '__main__':
+    unittest.main()
+\end{lstlisting}
+
+\capitulo{Capítulo 17}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 18}
+\begin{lstlisting}[style=pythonstyle]
+class TestCase:
+    def __init__(self, name) -> None:
+        pass
+
+    def run(self) -> int:
+        method = getattr(self, self.name)
+        method()
+
+class WasRun(TestCase):
+
+    def __init__(self, name) -> None:
+        self.wasRun = None 
+        TestCase.__init__(self, name)
+
+    def testMethod(self) -> int:
+        self.wasRun = 1
+
+    def run(self) -> int:
+        self.testMethod
+
+test = WasRun('testMethod')
+print(test.wasRun)
+test.run()
+print(test.wasRun)
+\end{lstlisting}
+
+
+\capitulo{Capítulo 19}
+\begin{lstlisting}[style=pythonstyle]
+class TestCase:
+    def __init__(self, name) -> None:
+        pass
+
+    def run(self) -> int:
+        method = getattr(self, self.name)
+        method()
+
+    def setUP() -> None:
+        pass
+
+    def testSetUp(self) -> None:
+        tes = WasRun('testMethod')
+        test.run()
+        assert(test.wasSetUp)
+
+    def testRunning(self) -> None:
+        tes = WasRun('testMethod')
+        test.run()
+        assert(test.wasRun)
+
+class WasRun(TestCase):
+
+    def __init__(self, name) -> None:
+        self.wasRun = None 
+        TestCase.__init__(self, name)
+
+    def testMethod(self) -> int:
+        self.wasRun = 1
+
+    def run(self) -> int:
+        self.testMethod
+
+    def setUp(self) -> None:
+        self.wasRun = None
+        self.wasSetUp = 1
+
+test = WasRun('testMethod')
+print(test.wasRun)
+test.run()
+print(test.wasRun)
+\end{lstlisting}
+
+
+\capitulo{Capítulo 20}
+\begin{lstlisting}[style=pythonstyle]
+class TestCase:
+    def __init__(self, name) -> None:
+        pass
+
+    def run(self, result) -> int:
+        result.testStarted()
+        self.setUp()
+        method = getattr(self, self.name)
+        method()
+        self.tearDown()
+
+    def setUP(self) -> None:
+        self.test = WasRun('testMethod')
+
+    def testTemplateMethod(self) -> None:
+        tes = WasRun('testMethod')
+        test.run()
+        assert('setUp testMethod' == stest.log)
+
+    def tearDown(self) -> None:
+        pass
+
+class WasRun(TestCase):
+
+    def __init__(self, name) -> None:
+        self.wasRun = None 
+        TestCase.__init__(self, name)
+
+    def testMethod(self) -> int:
+        self.wasRun = 1
+        self.log = self.log + 'testMethod'
+
+    def run(self) -> int:
+        self.testMethod
+
+    def setUp(self) -> None:
+        self.log = 'setUp' 
+
+    def testMethod(self) -> None:
+        self.log = self.log + 'testMethod' 
+
+    def tearDown(self) -> None:
+        self.log = self.log + 'tearDown' 
+
+test = WasRun('testMethod')
+print(test.wasRun)
+test.run()
+print(test.wasRun)
+\end{lstlisting}
+
+
+\capitulo{Capítulo 21}
+\begin{lstlisting}[style=pythonstyle]
+class TestResult:
+
+    def __init__(self) -> None:
+        self.runCount = 0
+
+    def summary(self) -> None:
+        return f'{self.runCount} run, 0 failed'
+
+    def testStarted(self) -> None:
+        self.runCount = self.runCount + 1
+
+class TestCase:
+    def __init__(self, name) -> None:
+        pass
+
+    def run(self, result: int) -> int:
+        result.TestResult()
+        result.testStarted()
+        self.setUp()
+        method = getattr(self, self.name)
+        method()
+        self.tearDown()
+        return result 
+
+    def setUP(self) -> None:
+        self.test = WasRun('testMethod')
+
+    def testTemplateMethod(self) -> None:
+        tes = WasRun('testMethod')
+        test.run()
+        assert('setUp testMethod' == stest.log)
+
+    def tearDown(self) -> None:
+        pass
+
+    def testResult(self) -> None:
+        test = WasRun('testMethod')
+        result = test.runn()
+        assert('1 run, 0 failed'  == result.summary())
+
+    def testFailedResult(self) -> None:
+        test = WasRun('testBrokenMethod')
+        result = test.runn()
+        assert('1 run, 1 failed',result.summary)
+
+class WasRun(TestCase):
+
+    def __init__(self, name) -> None:
+        self.wasRun = None 
+        TestCase.__init__(self, name)
+
+    def testMethod(self) -> int:
+        self.wasRun = 1
+        self.log = self.log + 'testMethod'
+
+    def run(self) -> int:
+        self.testMethod
+
+    def setUp(self) -> None:
+        self.log = 'setUp' 
+
+    def testMethod(self) -> None:
+        self.log = self.log + 'testMethod' 
+
+    def tearDown(self) -> None:
+        self.log = self.log + 'tearDown' 
+
+    def testBrokenMethod(self) -> None:
+        raise Exception
+
+test = WasRun('testMethod')
+print(test.wasRun)
+test.run()
+print(test.wasRun)
+\end{lstlisting}
+
+\capitulo{Capítulo 23}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 24}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 25}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 26}
+\begin{lstlisting}[style=pythonstyle]
+Exercicio 1
+import unittest
+
+def add(x: int, y: int) -> int:
+    if isinstance(x, int) and isinstance(y, int):
+        return x + y
+    raise Exception ('Esta funcao so aceita valores inteiros..')
+
+class TestADD(unittest.TestCase):
+
+    def test_add_passed(self) -> None:
+        self.assertEqual(add(1,1), 2)
+
+    def test_add_error(self) -> None:
+        with self.assertRaises(Exception) as cm:
+            add(1.0, 0.0)
+        self.assertEqual(str(cm.exception), "Esta funcao so aceita valores inteiros..")
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
+
+
+Exercicio 2
+import pytest 
+
+def add(x: int, y: int) -> int:
+    if isinstance(x, int) and isinstance(y, int):
+        return x - y
+    raise Exception ('Esta funcao so aceita valores inteiros..')
+
+class TestAdd:
+
+    def test_true_sub(self) -> None:
+        assert sub(10,10) == 20
+
+    def test_sub_error_msg(self) -> None:
+        with pytest.raises(Exception) as error:
+            sub(1.0,1.0)
+        assert str(error.value) == 'Esta funcao so aceita valores inteiros..'
+
+
+Exercicio 3
+import pytest 
+
+def mult(x: int, y: int) -> int:
+    if isinstance(x, int) and isinstance(y, int):
+        return x - y
+    raise Exception ('mult..')
+
+class TestMult:
+
+    def test_true_mult(self) -> None:
+        assert mult(10,10) == 20
+
+    def test_mult_error_msg(self) -> None:
+        with pytest.raises(Exception) as error:
+            mult(1.0,1.0)
+        assert str(error.value) == 'mult..'
+
+
+Exercicio 4
+import pytest 
+
+def div(x: int, y: int) -> int:
+    if isinstance(x, int) and isinstance(y, int):
+        return x - y
+    raise Exception ('div..')
+
+class TestDiv:
+
+    def test_true_div(self) -> None:
+        assert div(10,10) == 20
+
+    def test_div_error_msg(self) -> None:
+        with pytest.raises(Exception) as error:
+            div(1.0,1.0)
+        assert str(error.value) == 'div..'
+
+
+Exercicio 5
+import pytest 
+
+def sum_equal(x: int, y: int) -> int:
+    if x == y:
+        return x + y
+
+class TestSumEqual:
+
+    def test_true_sum(self) -> None:
+        assert sum_equal(10,10) == 20
+
+
+Exercicio 6
+import pytest 
+
+def equal(x: int, y: int) -> bool:
+    return x == y
+
+class TestSumEqual:
+
+    def test_true_sum(self) -> None:
+        assert equal(10,10)
+
+
+Exercicio 7
+import pytest 
+
+def equal_null(x: None, y: None) -> bool:
+    return x == y
+
+class TestSumEqual:
+
+    def test_true_sum(self) -> None:
+        assert equal(None, None)
+
+
+Exercicio 8
+import pytest 
+
+def equal_null(x: None, y: None) -> bool:
+    return x == y
+
+class TestSumEqual:
+
+    def test_true_sum(self) -> None:
+        assert equal(None, None)
+\end{lstlisting}
+
+\capitulo{Capítulo 27}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 28}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 29}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 30}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 31}
+\begin{lstlisting}[style=pythonstyle]
+LEITURA....
+\end{lstlisting}
+
+\capitulo{Capítulo 32}
+\begin{lstlisting}[style=pythonstyle]
+def tipo_triangulo(a, b, c):
+    if a + b <= c or a + c <= b or b + c <= a:
+        return 0  
+
+    if a == b == c:
+        return 1
+    elif a == b or a == c or b == c:
+        return 2
+    else:
+        return 3
+
+def test_equilatero():
+    assert tipo_triangulo(3, 3, 3) == 1
+
+def test_isosceles():
+    assert tipo_triangulo(3, 3, 4) == 2
+
+def test_escaleno():
+    assert tipo_triangulo(3, 4, 5) == 3
+
+def test_nao_triangulo():
+    assert tipo_triangulo(1, 2, 3) == 0
+\end{lstlisting}
+
+\capitulo{FIM....}
+
+\end{document}
+
+
