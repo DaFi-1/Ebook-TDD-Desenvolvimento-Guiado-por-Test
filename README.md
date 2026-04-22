@@ -1,42 +1,42 @@
-# ✅ Check-in de Estudo
+# ✅ Study Check-in
 
-📚 **Status:** Finalizado  
-📅 **Data:** 10/04/2026  
+📚 **Status:** Completed  
+📅 **Date:** 10/04/2026  
 
-✔️ Todos os capítulos foram estudados  
-✔️ Exercícios realizados  
-✔️ Conceitos principais compreendidos  
-🧠 **Resultado:** Estudo concluído com sucesso  
+✔️ All chapters have been studied  
+✔️ Exercises completed  
+✔️ Main concepts understood  
+🧠 **Result:** Study successfully completed  
 
-# ⭐ Avaliação do Livro
+# ⭐ Book Evaluation
 
-| Critério              | Nota (0–10)          |
-|-----------------------|----------------------|
-| ⭐ Recomendação       | ⭐⭐⭐☆☆☆☆☆☆☆        |
-| 🧠 Facilidade         | ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ |
-| 💡 Didática           | ⭐⭐⭐⭐⭐⭐☆☆☆☆     |
-| ⚙️ Aplicação prática  | ⭐⭐☆☆☆☆☆☆☆☆         |
-| 📈 Evolução           | ⭐⭐⭐⭐⭐☆☆☆☆☆      |
-| 🔁 Releitura          | ⭐⭐⭐☆☆☆☆☆☆☆☆       |
-| 🎯 Clareza geral      | ⭐⭐⭐⭐☆☆☆☆☆☆       |
+| Criterion            | Score (0–10)         |
+|----------------------|----------------------|
+| ⭐ Recommendation     | ⭐⭐⭐☆☆☆☆☆☆☆        |
+| 🧠 Ease              | ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ |
+| 💡 Didactics         | ⭐⭐⭐⭐⭐⭐☆☆☆☆     |
+| ⚙️ Practical use     | ⭐⭐☆☆☆☆☆☆☆☆         |
+| 📈 Learning growth   | ⭐⭐⭐⭐⭐☆☆☆☆☆      |
+| 🔁 Re-read value     | ⭐⭐⭐☆☆☆☆☆☆☆☆       |
+| 🎯 Overall clarity   | ⭐⭐⭐⭐☆☆☆☆☆☆       |
 
-# 📁 Estrutura do Projeto
-Este repositório está organizado da seguinte forma:
-- 📁 **res/**       → Diretório com imagens e outros recursos utilizados no projeto.
-- 📄 **tdd.py**     → Contém todos os códigos desenvolvidos ao longo do estudo de TDD.
-- 📄 **main.tex**   → Arquivo principal em LaTeX responsável por gerar o PDF do estudo.
-- 📄 **main.pdf**   → Documento final compilado a partir do `main.tex`, contendo todo o material organizado.
-- 📄 **README.md**  → Arquivo de documentação do repositório, com explicações gerais sobre o projeto.
+# 📁 Project Structure
+This repository is organized as follows:
+- 📁 **res/**       → Directory containing images and other resources used in the project.
+- 📄 **tdd.py**     → Contains all code developed during the TDD study.
+- 📄 **main.tex**   → Main LaTeX file responsible for generating the study PDF.
+- 📄 **main.pdf**   → Final compiled document from `main.tex`, containing all organized material.
+- 📄 **README.md**  → Repository documentation file with general project explanations.
 
-# 📄 Imagens do PDF
+# 📄 PDF Images
 
-As imagens abaixo são apenas uma visualização do conteúdo presente neste repositório.
+The images below are only a preview of the content in this repository.
 
-Para acessar o material completo com a **melhor qualidade possível**, recomendo baixar o PDF diretamente do projeto.
-👉 Dessa forma, você poderá visualizar todo o conteúdo com maior nitidez e sem perdas de resolução.
+To access the full material in the **highest quality possible**, I recommend downloading the PDF directly from the project.
+👉 This way, you can view all content with better sharpness and no resolution loss.
 <br>
 <br>
 <div> 
     <img src="./res/page1.jpg" width="800" style="border:none;padding:none;">
     <img src="./res/page2.jpg" width="800" style="border:none;padding:none;">
-<div> 
+<div>
